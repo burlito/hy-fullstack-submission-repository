@@ -1,0 +1,52 @@
+sequenceDiagram
+    participant browser
+    participant server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    activate server
+    server-->>browser: HTML document
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate server
+    server-->>browser: the css file
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    activate server
+    server-->>browser: the JavaScript file
+    deactivate server
+
+    Note right of browser: The browser starts executing the JavaScript code that fetches the JSON from the server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate server
+    server-->>browser: [{"content":"otra","date":"2023-08-15T12:18:47.732Z"},{"content":"asefasesefsaeffase","date":"2023-08-15T12:19:16.454Z"}, ... ]
+    deactivate server
+
+    Note right of browser: The browser executes the callback function that renders the notes
+
+	Note right of browser: Now we will submit new note with content "Test Note" and click on save
+
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/data.json payload: "note=Test+Note"
+    activate server
+    server-->>browser: HTML document
+    deactivate server
+
+	Note  right of browser: Server saved our information and returns HTML document, same as in beginning. Web page is reloaded and we again ask for same resources.
+
+   browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate server
+    server-->>browser: the css file
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    activate server
+    server-->>browser: the JavaScript file
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate server
+    server-->>browser: [... ,{"content":"Test Note","date":"2023-08-15T20:28:21.533Z"}]
+    deactivate server
+    Note  right of browser: "But responce to json file now contains also our note" 

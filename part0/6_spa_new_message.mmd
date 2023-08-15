@@ -1,0 +1,35 @@
+sequenceDiagram
+    participant browser
+    participant server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa
+    activate server
+    server-->>browser: HTML document
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate server
+    server-->>browser: the css file
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+    activate server
+    server-->>browser: the JavaScript file
+    deactivate server
+
+    Note right of browser: The browser starts executing the JavaScript code that fetches the JSON from the server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate server
+    server-->>browser: [{"content":"ADWADW","date":"2023-08-15T12:21:06.229Z"},{"content":" ","date":"2023-08-15T12:21:24.605Z"},...]
+    deactivate server
+
+    Note right of browser: On first look it looks very similiar as previous example.
+    Note right of browser: Now we send new message with content "New Message".
+
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa payload: {"content":"test","date":"2023-08-15T15:51:51.257Z"};
+    activate server
+    server-->>browser: responce json: {"message":"note created"}
+    deactivate server
+
+    Note right of browser: Web page was not reloaded (but data were updated), and there is no additional requests.
